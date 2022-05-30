@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useSharedState } from './store';
+import { useSharedState } from 'utils/store';
 
 const TextBox = () => {
   const [state, setState] = useSharedState();

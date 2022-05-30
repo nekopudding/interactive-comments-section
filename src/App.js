@@ -1,20 +1,50 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
 
-import { SharedStateProvider } from './store';
-import Counter from './Counter';
-import TextBox from './TextBox';
+import { SharedStateProvider } from './utils/store';
+import Counter from './components/Counter';
+import TextBox from 'components/TextBox';
+import Header from 'components/Header';
+import Main from 'components/Main';
+import Footer from 'components/Footer';
+import { CssBaseline, ThemeProvider } from '@mui/material';
+import theme from 'theme';
+import {useSharedState} from 'utils/store';
 
-const App = () => (
-  <SharedStateProvider>
-    <div className="App">
-      <header className="App-header">
+function App() {
+  const [state, setState] = useSharedState();
+
+  useEffect(()=> {
+    if (!setState) return;
+
+    const comments = JSON.parse(localStorage.getItem("comments"));
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+    setState((prev) => ({
+      ...prev,
+      comments,
+      currentUser
+    }));
+  },[setState]) //load the last currentUser, comments, 
+
+  useEffect(()=> { 
+    if (!state || !state.comment || !state.currentUser) return;
+    localStorage.setItem("comments", JSON.stringify(state.comments));
+    localStorage.setItem("currentUser", JSON.stringify(state.currentUser));
+  },[state])
+
+  return (
+    <SharedStateProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline/>
+        <Header/>
+        <Main/>
+        <Footer/>
         <Counter />
         <TextBox />
-      </header>
-    </div>
-  </SharedStateProvider>
-);
+      </ThemeProvider>
+    </SharedStateProvider>
+  );
+}
 
 export default App;

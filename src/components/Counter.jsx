@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useSharedState } from './store';
+import { useSharedState } from '../utils/store';
 
 const Counter = () => {
   const [state, setState] = useSharedState();
