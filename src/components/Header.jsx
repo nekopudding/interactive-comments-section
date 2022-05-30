@@ -6,6 +6,7 @@ import {useSharedState} from 'utils/store'
 
 function Header() {
   const [state, setState] = useSharedState();
+  const {currentUser,users} = state;
   const [anchorEl, setAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);
 
@@ -37,10 +38,9 @@ function Header() {
                 display: { xs: 'block', md: 'none' },
               }}
     >
-      {state.users.map((user) => {
-        console.log(process.env.PUBLIC_URL + user.image.png)
+      {users.map((user) => {
         return (
-          <MenuItem onClick={()=>handleSelectUser(user.username)} key={user.username} selected={state.currentUser === user.username}>
+          <MenuItem onClick={()=>handleSelectUser(user.username)} key={user.username} selected={currentUser === user.username}>
             <Avatar alt={user.username} src={process.env.PUBLIC_URL + user.image.png} />
             <Typography variant="body" sx={{ml: 2}}>{user.username}</Typography>
           </MenuItem>
@@ -71,10 +71,10 @@ function Header() {
             onClick={handleProfileMenuOpen}
           >
             {
-              (state.currentUser !== "") ? 
+              (currentUser !== "") ? 
                 <Avatar 
-                  alt={state.currentUser} 
-                  src={process.env.PUBLIC_URL + state.users.find(user => user.username === state.currentUser).image.png}   
+                  alt={currentUser} 
+                  src={process.env.PUBLIC_URL + users.find(user => user.username === currentUser).image.png}   
                 /> :
                 <AccountCircle />
             }

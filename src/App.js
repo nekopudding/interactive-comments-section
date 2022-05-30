@@ -20,6 +20,7 @@ function App() {
     const comments = JSON.parse(localStorage.getItem("comments"));
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
+    if (!comments || !currentUser) return;
     setState((prev) => ({
       ...prev,
       comments,
@@ -31,7 +32,7 @@ function App() {
     if (!state || !state.comment || !state.currentUser) return;
     localStorage.setItem("comments", JSON.stringify(state.comments));
     localStorage.setItem("currentUser", JSON.stringify(state.currentUser));
-  },[state])
+  },[state])  
 
   return (
     <SharedStateProvider>
@@ -40,8 +41,6 @@ function App() {
         <Header/>
         <Main/>
         <Footer/>
-        <Counter />
-        <TextBox />
       </ThemeProvider>
     </SharedStateProvider>
   );
