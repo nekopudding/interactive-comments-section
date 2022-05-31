@@ -29,20 +29,23 @@ function Header(props) {
         horizontal: 'left',
       }}
       keepMounted
+      
       transformOrigin={{
         vertical: 'top',
         horizontal: 'left',
       }}
       open={isMenuOpen}
       onClose={()=>setAnchorEl(null)}
-      sx={{
-                display: { xs: 'block', md: 'none' },
-              }}
+      sx={{ 
+        display: { xs: 'block', md: 'none' }, 
+        '& .MuiPaper-root': {top: headerHeight + "px !important"},
+        '& .MuiList-root': {p: 0} 
+      }}
     >
       {users.map((user) => {
         return (
           <MenuItem onClick={()=>handleSelectUser(user.username)} key={user.username} selected={currentUser === user.username}>
-            <Avatar alt={user.username} src={process.env.PUBLIC_URL + user.image.png} />
+            <Avatar alt={user.username} src={process.env.PUBLIC_URL + user.image.png} sx={{width: 36, height: 36}}/>
             <Typography variant="body" sx={{ml: 2}}>{user.username}</Typography>
           </MenuItem>
         )
@@ -50,7 +53,7 @@ function Header(props) {
     </Menu>
 
     <AppBar position="static">
-      <Toolbar sx={{minHeight: headerHeight, height: headerHeight}}>
+      <Toolbar sx={{minHeight: headerHeight, height: headerHeight}} disableGutters>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <IconButton
@@ -70,7 +73,7 @@ function Header(props) {
             aria-haspopup="true"
             color="inherit"
             onClick={handleProfileMenuOpen}
-            sx={{p:0, mx: 1}}
+            sx={{p:0, ml: 2, mr:3}}
           >
             {
               (currentUser !== "") ? 
