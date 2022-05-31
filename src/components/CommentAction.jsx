@@ -7,7 +7,7 @@ import theme from 'theme';
 
 
 function CommentAction(props) {
-  const {type,sx,onClick} = props;
+  const {type,sx,onClick,reply,edit} = props;
   const primaryLight = theme.palette.primary.light;
   const secondaryLight = theme.palette.secondary.light;
   return (
@@ -16,10 +16,12 @@ function CommentAction(props) {
         <Box 
           sx={{
             userSelect: 'none',
-            '&:active *': {
-              color: primaryLight, 
-              fill: primaryLight
-            },
+            ...(reply && {
+              '& *':{
+                color: primaryLight, 
+                fill: primaryLight,
+              }
+            }),
             ...sx
           }}
           onClick={onClick}
@@ -32,10 +34,12 @@ function CommentAction(props) {
         <Box 
           sx={{
             userSelect: 'none',
-            '&:active *': {
-              color: primaryLight, 
-              fill: primaryLight
-            },
+            ...(edit && {
+              '& *':{
+                color: primaryLight, 
+                fill: primaryLight
+              },
+            }),
             ...sx
           }}
           onClick={onClick}

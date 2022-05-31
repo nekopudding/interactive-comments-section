@@ -8,11 +8,11 @@ import CommentAction from './CommentAction';
 function CommentHeader(props) {
   const [state,useState] = useSharedState();
   const {users,currentUser} = state;
-  const {user,createdAt ,onDelete,onEdit,onReply} = props;
+  const {user,createdAt ,onDelete,onEdit,onReply, reply,edit} = props;
 
   return (
     <>
-      <Box sx={{display: 'flex', height: 32, alignItems: 'center', justifyContent: 'space-between'}}>
+      <Box sx={{display: 'flex', height: 32, alignItems: 'center', justifyContent: 'space-between', mb: '20px'}}>
         <Box className="header-left" sx={{flexGrow: 1, display: 'flex', alignItems: 'center'}}>
           <Avatar 
             alt="avatar"
@@ -28,10 +28,10 @@ function CommentHeader(props) {
           {(user === currentUser) ? 
             <>
               <CommentAction type='delete' onClick={onDelete}/> 
-              <CommentAction type='edit' sx={{ml: 3}} onClick={onEdit}/>
+              <CommentAction type='edit' sx={{ml: 3}} onClick={onEdit} edit={edit}/>
             </> 
             :
-            <CommentAction type='reply' onClick={onReply}/>
+            <CommentAction type='reply' onClick={onReply} reply={reply}/>
           }
           
         </Box>

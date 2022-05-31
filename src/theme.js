@@ -35,10 +35,12 @@ const theme = createTheme({
   typography: {
     fontFamily: "Rubik",
     fontWeight: 400,
+    color: _.clr500,
 
     body: {
       fontSize: "16px",
       color: _.clr400,
+      lineHeight: 1.5
     },
     scoreText: {
       fontSize: "16px",
