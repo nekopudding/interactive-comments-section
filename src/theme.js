@@ -42,6 +42,12 @@ const theme = createTheme({
       color: _.clr400,
       lineHeight: 1.5
     },
+    deleted: {
+      fontSize: "16px",
+      color: _.clr400,
+      lineHeight: 1.5,
+      fontStyle: 'italic',
+    },
     scoreText: {
       fontSize: "16px",
       color: _.primary.main,

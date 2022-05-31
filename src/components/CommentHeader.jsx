@@ -8,7 +8,7 @@ import CommentAction from './CommentAction';
 function CommentHeader(props) {
   const [state,useState] = useSharedState();
   const {users,currentUser} = state;
-  const {user,createdAt ,onDelete,onEdit,onReply, reply,edit} = props;
+  const {user,createdAt ,onDelete,onEdit,onReply, reply,edit, deleted} = props;
 
   return (
     <>
@@ -24,17 +24,19 @@ function CommentHeader(props) {
           <Typography variant="body" sx={{ml:2}}>{createdAt}</Typography>
         </Box>
         
-        <Box className="header-right" sx={{ml: 3, display: 'flex', alignItems: 'center'}}>
-          {(user === currentUser) ? 
-            <>
-              <CommentAction type='delete' onClick={onDelete}/> 
-              <CommentAction type='edit' sx={{ml: 3}} onClick={onEdit} edit={edit}/>
-            </> 
-            :
-            <CommentAction type='reply' onClick={onReply} reply={reply}/>
-          }
-          
-        </Box>
+        {!deleted &&
+          <Box className="header-right" sx={{ml: 3, display: 'flex', alignItems: 'center'}}>
+            {(user === currentUser) ? 
+              <>
+                <CommentAction type='delete' onClick={onDelete}/> 
+                <CommentAction type='edit' sx={{ml: 3}} onClick={onEdit} edit={edit}/>
+              </> 
+              :
+              <CommentAction type='reply' onClick={onReply} reply={reply}/>
+            }
+          </Box>
+        }
+        
 
       </Box>
     </>

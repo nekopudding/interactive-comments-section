@@ -22,9 +22,6 @@ function CommentBox(props) {
   function handleMinus() {
     console.log("downvoting");
   }
-  function handleDelete(){
-    console.log("deleting");
-  }
   function handleEdit(){
     setSelected(-id);
   }
@@ -72,6 +69,21 @@ function CommentBox(props) {
     }})
     setSelected(0);
   }
+  function handleDelete() { //on submitting edit text change
+    let updatedComments = state.comments;
+    
+    let indices = findIndex(id);
+    if (indices.c !== -1 && indices.r === -1) {
+      updatedComments[indices.c] = {...updatedComments[indices.c], content: "\0"}
+    } else if (indices.r !== -1 && indices.c !== -1) {
+      updatedComments[indices.c].replies[indices.r] = {...updatedComments[indices.c].replies[indices.r], content: "\0"}
+    }
+
+    setState(prev => {return {
+      ...prev,
+      comments: updatedComments
+    }})
+  }
 
   return (
     <>
@@ -85,19 +97,24 @@ function CommentBox(props) {
           p: 3,
         }}
       >
-        <ScoreButton score={score} onPlus={handlePlus} onMinus={handleMinus}/>
+        {content !== "\0" && <ScoreButton score={score} onPlus={handlePlus} onMinus={handleMinus}/>}
         <Box sx={{flexGrow: 1, ml: 3, }}>
-          <CommentHeader user={user} createdAt={createdAt} onDelete={handleDelete} onEdit={handleEdit} onReply={handleReply} reply={selected === id} edit={selected === -id}/>
-          {(selected === -id) ? 
-            <EditField defaultValue={content} onChange={handleEditTextChange} onSubmit={handleEditSubmit}/>
-          : <Typography variant='body' sx={{flexGrow: 1, '& > span': {...theme.typography.primaryAction} }} component='p'>
-              {replyingTo && <span>{'@' + replyingTo + ' '}</span>}
-              {content.split('\n').map((line,i) => {return (<React.Fragment key={i}>
-                {line}
-                <br/>
-                </React.Fragment>)})}
-            </Typography>
+          <CommentHeader user={user} createdAt={createdAt} onDelete={handleDelete} onEdit={handleEdit} onReply={handleReply} reply={selected === id} edit={selected === -id} deleted={content === "\0"}/>
+          {content !== "\0" ? 
+            (selected === -id) ? 
+              <EditField defaultValue={content} onChange={handleEditTextChange} onSubmit={handleEditSubmit}/>
+              : 
+              <Typography variant='body' sx={{flexGrow: 1, '& > span': {...theme.typography.primaryAction} }} component='p'>
+                {replyingTo && <span>{'@' + replyingTo + ' '}</span>}
+                {content.split('\n').map((line,i) => {return (<React.Fragment key={i}>
+                  {line}
+                  <br/>
+                  </React.Fragment>)})}
+              </Typography>
+            :
+            <Typography variant='deleted'>This comment has been deleted.</Typography>
           }
+          
         </Box>
       </Box>
       {(selected === id) && <CommentInputBox type='reply' replyingTo={user} insertAt={findIndex(id).c} setSelected={setSelected}/>}
