@@ -5,7 +5,7 @@ import {ReactComponent as PlusIcon} from 'images/icon-plus.svg'
 import {ReactComponent as MinusIcon} from 'images/icon-minus.svg'
 
 function ScoreButton(props) {
-  const {score} = props;
+  const {score,onPlus,onMinus} = props;
   return (
     <>
       <Stack 
@@ -21,9 +21,13 @@ function ScoreButton(props) {
         <IconButton 
           sx={{
             m:0, p:1.5, 
+            height: 36, width: 36,
             borderRadius: 0, 
-            '&:hover': {bgcolor: 'transparent'}
+            '&:hover': {bgcolor: 'transparent'},
+            '&:active *': {fill: theme.palette.primary.main}
           }}
+          disableRipple
+          onClick={onPlus}
         >
           <PlusIcon/>
         </IconButton>
@@ -31,9 +35,13 @@ function ScoreButton(props) {
         <IconButton 
           sx={{
             m:0, p:1.5, 
+            height: 36, width: 36,
             borderRadius: 0, 
-            '&:hover': {bgcolor: 'transparent'}
+            '&:hover': {bgcolor: 'transparent'},
+            '&:active *': {fill: theme.palette.primary.main}
           }}
+          disableRipple
+          onClick={onMinus}
         >
           <MinusIcon/>
         </IconButton>

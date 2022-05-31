@@ -11,7 +11,7 @@ import {useSharedState} from 'utils/store';
 
 function App() {
   const [state, setState] = useSharedState();
-  const headerHeight = 48;
+  const headerHeight = 56;
 
   useEffect(()=> {
     if (!setState) return;

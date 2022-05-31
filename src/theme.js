@@ -44,6 +44,26 @@ const theme = createTheme({
       fontSize: "16px",
       color: _.primary.main,
       fontWeight: 500
+    },
+    username: {
+      fontWeight: 500,
+      fontSize: '16px',
+      color: _.clr500
+    },
+    you: {
+      fontSize: '12px',
+      fontWeight: 500,
+      color: _.clr100
+    },
+    primaryAction: {
+      fontSize: '16px',
+      fontWeight: 500,
+      color: _.primary.main,
+    },
+    secondaryAction: {
+      fontSize: '16px',
+      fontWeight: 500,
+      color: _.secondary.main,
     }
   }
 })

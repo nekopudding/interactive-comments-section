@@ -70,6 +70,7 @@ function Header(props) {
             aria-haspopup="true"
             color="inherit"
             onClick={handleProfileMenuOpen}
+            sx={{p:0, mx: 1}}
           >
             {
               (currentUser !== "") ? 
