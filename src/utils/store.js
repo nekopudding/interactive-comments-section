@@ -5,7 +5,8 @@ import data from './data.json'
 const initialState = {
   users: data.users,
   currentUser: data.currentUser,
-  comments: data.comments
+  comments: data.comments,
+  newId: 5
 };
 
 const useMyState = () => useState(initialState);

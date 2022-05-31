@@ -41,7 +41,7 @@ function Main() {
             {...c}
           />
         )}
-        <CommentInputBox/>
+        <CommentInputBox type='comment'/>
       </Stack>
 
     </>

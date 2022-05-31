@@ -6,17 +6,41 @@ import InputField from './InputField'
 
 function CommentInputBox(props) {
   const [state,setState] = useSharedState()
-  const {users,currentUser} = state;
-  const {type} = props;
+  const {users,currentUser, newId,comments} = state;
+  const {type, replyingTo,insertAt,setSelected} = props;
   const [text,setText] = useState("");
   const inputField = useRef(null);
 
-  function handleSend(){
-    console.log(text);
-    console.log('sending');
-    inputField.current.value = '';
+  function handleSubmit(){
+    if (type === 'comment') {
+      const newComment = {
+        id : newId,
+        content: text,
+        createdAt: new Date().toLocaleDateString("en-US"),
+        score: 0,
+        user: currentUser,
+        replies: []
+      }
+      setState(prev=> {return {...prev, newId: newId+1, comments: [...prev.comments, newComment]}})
+      inputField.current.value = '';
+      return;
+    } else if (type === 'reply') {
+      const updatedComments = state.comments;
+      const newReply = {
+        id : newId,
+        content: text,
+        createdAt: new Date().toLocaleDateString("en-US"),
+        score: 0,
+        user: currentUser,
+        replyingTo: replyingTo
+      }
+      updatedComments[insertAt].replies.push(newReply);
+      setState(prev=> {return {...prev, newId: newId+1, comments: updatedComments}})
+      setSelected(0);
+    }
+    
   }
-  function handleChange(e) {
+  function handleTextChange(e) {
     setText(e.target.value);
   }
 
@@ -34,11 +58,11 @@ function CommentInputBox(props) {
         }}
       >
         <Avatar alt="avatar" src={process.env.PUBLIC_URL + users.find(user => user.username === currentUser).image.png} sx={{mr: 2}}/>
-        <InputField handleChange={handleChange} type={type} r={inputField}/>
+        <InputField handleChange={handleTextChange} type={type} r={inputField}/>
         <Button 
           variant='contained' 
           size='large' 
-          onClick={handleSend}
+          onClick={handleSubmit}
           sx={{
             width: 104, height: 48, ml:  2, borderRadius: '8px',
             '&:hover': {bgcolor: theme.palette.primary.main, boxShadow: '0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)'}, 

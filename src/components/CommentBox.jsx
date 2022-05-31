@@ -31,24 +31,41 @@ function CommentBox(props) {
   function handleReply(){
     setSelected(id);
   }
+  function handleReplySubmit() {
+
+  }
   function handleEditTextChange(e) {
     setEditText(e.target.value);
   }
-  function handleUpdate() {
-    let updatedComments = state.comments;
-    let rIndex = -1;
-    state.comments.forEach((c,index) => {
-      if (c.id === id) { 
-        updatedComments[index] = {...updatedComments[index], content: editText}
+  function findIndex(id){
+    let indices = {
+      c: -1,
+      r: -1
+    }
+    state.comments.forEach((comment,index) => {
+      if (comment.id === id) { 
+        indices.c = index;
         return; 
       }
 
-      rIndex = c.replies.findIndex((r) => r.id === id);
-      if (rIndex !== -1) {
-        updatedComments[index].replies[rIndex] = {...updatedComments[index].replies[rIndex], content: editText}
+      indices.r = comment.replies.findIndex((r) => r.id === id);
+      if (indices.r !== -1) {
+        indices.c = index;
         return;
       }
     })
+    return indices;
+  }
+  function handleEditSubmit() { //on submitting edit text change
+    let updatedComments = state.comments;
+    
+    let indices = findIndex(id);
+    if (indices.c !== -1 && indices.r === -1) {
+      updatedComments[indices.c] = {...updatedComments[indices.c], content: editText}
+    } else if (indices.r !== -1 && indices.c !== -1) {
+      updatedComments[indices.c].replies[indices.r] = {...updatedComments[indices.c].replies[indices.r], content: editText}
+    }
+
     setState(prev => {return {
       ...prev,
       comments: updatedComments
@@ -72,9 +89,10 @@ function CommentBox(props) {
         <Box sx={{flexGrow: 1, ml: 3, }}>
           <CommentHeader user={user} createdAt={createdAt} onDelete={handleDelete} onEdit={handleEdit} onReply={handleReply} reply={selected === id} edit={selected === -id}/>
           {(selected === -id) ? 
-            <EditField defaultValue={content} onChange={handleEditTextChange} onUpdate={handleUpdate}/>
-          : <Typography variant='body' sx={{flexGrow: 1}} component='p'>
-              {content.split('\n').map(line => {return (<React.Fragment key={line}>
+            <EditField defaultValue={content} onChange={handleEditTextChange} onSubmit={handleEditSubmit}/>
+          : <Typography variant='body' sx={{flexGrow: 1, '& > span': {...theme.typography.primaryAction} }} component='p'>
+              {replyingTo && <span>{'@' + replyingTo + ' '}</span>}
+              {content.split('\n').map((line,i) => {return (<React.Fragment key={i}>
                 {line}
                 <br/>
                 </React.Fragment>)})}
@@ -82,7 +100,7 @@ function CommentBox(props) {
           }
         </Box>
       </Box>
-      {(selected=== id) && <CommentInputBox type='reply'/>}
+      {(selected === id) && <CommentInputBox type='reply' replyingTo={user} insertAt={findIndex(id).c} setSelected={setSelected}/>}
       {replies && replies.length > 0 && 
         <Box sx={{display: 'flex'}}>
           <Divider orientation='vertical' sx={{mx: '44px', borderRightWidth: '2px', borderColor: theme.palette.clr300}} flexItem/>
@@ -93,7 +111,6 @@ function CommentBox(props) {
               )
             }) }
           </Box>
-
         </Box>
       }
 
