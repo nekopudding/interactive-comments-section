@@ -4,7 +4,8 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import {useSharedState} from 'utils/store'
 
-function Header() {
+function Header(props) {
+  const {headerHeight} = props;
   const [state, setState] = useSharedState();
   const {currentUser,users} = state;
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -49,7 +50,7 @@ function Header() {
     </Menu>
 
     <AppBar position="static">
-      <Toolbar>
+      <Toolbar sx={{minHeight: headerHeight, height: headerHeight}}>
         <Box sx={{ flexGrow: 1 }} />
         <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
           <IconButton

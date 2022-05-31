@@ -2,8 +2,6 @@ import React, { useEffect } from 'react';
 import './App.css';
 
 import { SharedStateProvider } from './utils/store';
-import Counter from './components/Counter';
-import TextBox from 'components/TextBox';
 import Header from 'components/Header';
 import Main from 'components/Main';
 import Footer from 'components/Footer';
@@ -13,6 +11,7 @@ import {useSharedState} from 'utils/store';
 
 function App() {
   const [state, setState] = useSharedState();
+  const headerHeight = 48;
 
   useEffect(()=> {
     if (!setState) return;
@@ -38,7 +37,7 @@ function App() {
     <SharedStateProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline/>
-        <Header/>
+        <Header headerHeight={headerHeight}/>
         <Main/>
         <Footer/>
       </ThemeProvider>

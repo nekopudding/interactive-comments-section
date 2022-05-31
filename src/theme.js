@@ -28,7 +28,7 @@ const theme = createTheme({
   palette: {
     ..._,
     background: {
-      default: _.primary.light,
+      default: _.clr200,
       paper: _.clr100
     },
   },
@@ -39,6 +39,11 @@ const theme = createTheme({
     body: {
       fontSize: "16px",
       color: _.clr400,
+    },
+    scoreText: {
+      fontSize: "16px",
+      color: _.primary.main,
+      fontWeight: 500
     }
   }
 })

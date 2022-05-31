@@ -1,3 +1,4 @@
+import { Box,Stack } from '@mui/material';
 import React from 'react'
 import {useSharedState} from 'utils/store';
 import CommentBox from './CommentBox';
@@ -8,12 +9,26 @@ function Main() {
 
   return (
     <>
-      {comments.map((c)=> 
-        <CommentBox 
-          key={c.id} 
-          {...c}
-        />
-      )}
+      <Stack 
+        sx={{
+          my: 6,
+          width: "730px",
+          mx: 'auto',
+          alignItems: 'center',
+          // border: '1px solid red',
+          '& > * + *': {
+            mt: 2
+          }
+        }}
+      >
+        {comments.map((c)=> 
+          <CommentBox 
+            key={c.id} 
+            {...c}
+          />
+        )}
+      </Stack>
+
     </>
   )
 }
