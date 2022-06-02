@@ -28,9 +28,7 @@ function CommentBox(props) {
   function handleReply(){
     setSelected(id);
   }
-  function handleReplySubmit() {
 
-  }
   function handleEditTextChange(e) {
     setEditText(e.target.value);
   }
