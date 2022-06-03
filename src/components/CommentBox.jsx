@@ -15,11 +15,45 @@ function CommentBox(props) {
 
   const {id, content, createdAt, score,user,replies, replyingTo, selected,setSelected} = props;
   const [editText,setEditText] = useState(content);
+  const [totalVotes,setTotalVotes] = useState(score);
+  const [currUserVote,setCurrUserVote] = useState(0);
 
-  function handlePlus() {
+  function handleUpvote() {
+    let i = users.findIndex(user => user.username === currentUser);
+    let updatedUserList = users;
+    if (updatedUserList[i].upvoted.includes(id)) return;
+    else if (updatedUserList[i].downvoted.includes(id)) {
+      updatedUserList[i].downvoted = updatedUserList[i].downvoted.filter(foundId => foundId !== id);
+    } else {
+      updatedUserList[i].upvoted.push(id);
+    }
+
+    setState(prev => {
+      return {
+        ...prev,
+        users: updatedUserList
+      }
+    })
+    updateVotes(updatedUserList);
     console.log("upvoting");
   }
-  function handleMinus() {
+  function handleDownvote() {
+    let i = users.findIndex(user => user.username === currentUser);
+    let updatedUserList = users;
+    if (updatedUserList[i].downvoted.includes(id)) return;
+    else if (updatedUserList[i].upvoted.includes(id)) {
+      updatedUserList[i].upvoted = updatedUserList[i].upvoted.filter(foundId => foundId !== id);
+    } else {
+      updatedUserList[i].downvoted.push(id);
+    }
+
+    setState(prev => {
+      return {
+        ...prev,
+        users: updatedUserList
+      }
+    })
+    updateVotes(updatedUserList);
     console.log("downvoting");
   }
   function handleEdit(){
@@ -83,6 +117,36 @@ function CommentBox(props) {
     }})
   }
 
+  useEffect(()=> {
+    updateVotes(users);
+  },[]);
+
+  useEffect(()=> {
+    updateCurrUserVote();
+  },[currentUser]);
+
+  function updateVotes(userList) {
+    let votes = 0;
+    userList.forEach(user => {
+      if (user.upvoted.includes(id)){
+        votes++;
+      } else if (user.downvoted.includes(id)){
+        votes--;
+      }
+    });
+    setTotalVotes(votes + score);
+
+    //check if current user has upvoted/downvoted this comment
+    updateCurrUserVote();
+
+  }
+  function updateCurrUserVote() {
+    let i = users.findIndex(user => user.username === currentUser);
+    if (users[i].upvoted.includes(id)) setCurrUserVote(1);
+    else if (users[i].downvoted.includes(id)) setCurrUserVote(-1);
+    else setCurrUserVote(0)
+  }
+
   return (
     <>
       <Box 
@@ -95,7 +159,7 @@ function CommentBox(props) {
           p: 3,
         }}
       >
-        {content !== "\0" && <ScoreButton score={score} onPlus={handlePlus} onMinus={handleMinus}/>}
+        {content !== "\0" && <ScoreButton score={totalVotes} onPlus={handleUpvote} onMinus={handleDownvote} upvoted={currUserVote === 1} downvoted={currUserVote === -1}/>}
         <Box sx={{flexGrow: 1, ml: 3, }}>
           <CommentHeader user={user} createdAt={createdAt} onDelete={handleDelete} onEdit={handleEdit} onReply={handleReply} reply={selected === id} edit={selected === -id} deleted={content === "\0"}/>
           {content !== "\0" ? 
