@@ -8,6 +8,7 @@ function Main() {
   const [state,setState] = useSharedState();
   const {comments} = state;
   const [selected,setSelected] = useState(0); //0 for none, -id for edit, id for reply
+  const [reorderedComments,setReorderedComments] = useState(comments);
 
   useEffect(()=> {
     ['click','keydown'].forEach(event => 
@@ -18,6 +19,37 @@ function Main() {
       })
     )
   },[])
+
+  // useEffect(()=> {
+  //   updateOrder(comments);
+  // },[])
+  // function updateOrder(list){
+  //   console.log('reordering comments')
+  //   let reorderedList = [];
+  //   let temp = list;
+
+  //   while(temp.length > 0) {
+  //     let maxIndex = getMaxScoreIndex(temp);
+  //     // console.log(temp[maxIndex])
+
+  //     reorderedList.push(temp[maxIndex])
+  //     temp.splice(maxIndex,1);
+  //   }
+  //   console.log(reorderedList);
+  //   setReorderedComments(reorderedList)
+  // }
+
+  // function getMaxScoreIndex(list) {
+  //   let maxIndex = 0;
+  //   let maxScore = 0;
+  //   for (let i = 0; i < list.length; i++){
+  //     if (maxScore < list[i].score) {
+  //       maxIndex = i;
+  //       maxScore = list[i].score;
+  //     }
+  //   }
+  //   return maxIndex;
+  // }
 
   return (
     <>
@@ -33,7 +65,7 @@ function Main() {
           }
         }}
       >
-        {comments.map((c)=> 
+        {reorderedComments.map((c)=> 
           <CommentBox 
             key={c.id} 
             selected={selected}

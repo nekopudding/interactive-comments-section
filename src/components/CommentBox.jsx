@@ -4,6 +4,7 @@ import theme from 'theme';
 import { useSharedState } from 'utils/store';
 import CommentHeader from './CommentHeader';
 import CommentInputBox from './CommentInputBox';
+import DeleteDialog from './DeleteDialog';
 import EditField from './EditField';
 import InputField from './InputField';
 import ScoreButton from './ScoreButton';
@@ -11,12 +12,30 @@ import ScoreButton from './ScoreButton';
 
 function CommentBox(props) {
   const [state,setState] = useSharedState();
-  const {users,currentUser} = state;
+  const {users,currentUser, comments} = state;
 
   const {id, content, createdAt, score,user,replies, replyingTo, selected,setSelected} = props;
   const [editText,setEditText] = useState(content);
   const [totalVotes,setTotalVotes] = useState(score);
+  const [dialogOpen,setDialogOpen] = useState(false);
   const [currUserVote,setCurrUserVote] = useState(0);
+
+  function handleConfirmDelete() {
+    let updatedComments = state.comments;
+    
+    let indices = findIndex(id);
+    if (indices.c !== -1 && indices.r === -1) {
+      updatedComments[indices.c] = {...updatedComments[indices.c], content: "\0"}
+    } else if (indices.r !== -1 && indices.c !== -1) {
+      updatedComments[indices.c].replies[indices.r] = {...updatedComments[indices.c].replies[indices.r], content: "\0"}
+    }
+
+    setState(prev => {return {
+      ...prev,
+      comments: updatedComments
+    }})
+    setDialogOpen(false)
+  }
 
   function handleUpvote() {
     let i = users.findIndex(user => user.username === currentUser);
@@ -101,20 +120,8 @@ function CommentBox(props) {
     }})
     setSelected(0);
   }
-  function handleDelete() { //on submitting edit text change
-    let updatedComments = state.comments;
-    
-    let indices = findIndex(id);
-    if (indices.c !== -1 && indices.r === -1) {
-      updatedComments[indices.c] = {...updatedComments[indices.c], content: "\0"}
-    } else if (indices.r !== -1 && indices.c !== -1) {
-      updatedComments[indices.c].replies[indices.r] = {...updatedComments[indices.c].replies[indices.r], content: "\0"}
-    }
-
-    setState(prev => {return {
-      ...prev,
-      comments: updatedComments
-    }})
+  function handleDelete() { //on pressing delete button
+    setDialogOpen(true);
   }
 
   useEffect(()=> {
@@ -192,7 +199,7 @@ function CommentBox(props) {
           </Box>
         </Box>
       }
-
+      <DeleteDialog dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} handleConfirmDelete={handleConfirmDelete}/>
     </>
   )
 }

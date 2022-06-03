@@ -5,6 +5,7 @@ import { useSharedState } from 'utils/store';
 import theme from 'theme';
 import CommentAction from './CommentAction';
 import RelativeTime from '@yaireo/relative-time'
+import selectAvatar from 'utils/resolveAvatarPath';
 
 
 function CommentHeader(props) {
@@ -16,7 +17,11 @@ function CommentHeader(props) {
   const relativeTime = new RelativeTime();
   useEffect(()=> {
     setDate(relativeTime.from(new Date(createdAt)))
-  },[])
+    const interval = setInterval(()=> {
+      setDate(relativeTime.from(new Date(createdAt)))
+    },5000)
+    return () => clearInterval(interval)
+  },[createdAt])
 
   return (
     <>
@@ -24,7 +29,7 @@ function CommentHeader(props) {
         <Box className="header-left" sx={{flexGrow: 1, display: 'flex', alignItems: 'center'}}>
           <Avatar 
             alt="avatar"
-            src={process.env.PUBLIC_URL + users.find(u => u.username === user).image.png}
+            src={selectAvatar(user)}
             sx={{ width: 32, height: 32 }}   
           />
           <Typography variant="username" sx={{ml:2}}>{user}</Typography>

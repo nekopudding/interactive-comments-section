@@ -72,6 +72,10 @@ const theme = createTheme({
       fontSize: '16px',
       fontWeight: 500,
       color: _.secondary.main,
+    },
+    dialogHeader: {
+      fontSize: '24px',
+      fontWeight: 500,
     }
   }
 })

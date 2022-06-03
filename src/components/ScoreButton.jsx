@@ -27,7 +27,7 @@ function ScoreButton(props) {
               fill: upvoted ? theme.palette.primary.main : 'default',
             },
             '&:hover': {bgcolor: 'transparent'},
-            '&:active *': {fill: theme.palette.primary.main}
+            '&:active path': {fill: theme.palette.primary.main}
           }}
           disableRipple
           onClick={onPlus}

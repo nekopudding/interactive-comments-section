@@ -13,19 +13,23 @@ function App() {
   const [state, setState] = useSharedState();
   const headerHeight = 56;
 
-  useEffect(()=> {
-    if (!setState) return;
+  // useEffect(()=> {
+  //   if (!setState) return;
 
-    const comments = JSON.parse(localStorage.getItem("comments"));
-    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  //   const comments = JSON.parse(localStorage.getItem("comments"));
+  //   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  //   const users = JSON.parse(localStorage.getItem("users"));
 
-    if (!comments || !currentUser) return;
-    setState((prev) => ({
-      ...prev,
-      comments,
-      currentUser
-    }));
-  },[setState]) //load the last currentUser, comments, 
+  //   if (!comments || !currentUser || !users) return;
+  //   setState((prev) => ({
+  //     ...prev,
+  //     comments,
+  //     currentUser,
+  //     users
+  //   }));
+  // },[setState]) //load the last currentUser, comments, 
+
+
 
   useEffect(()=> { 
     if (!state || !state.comment || !state.currentUser) return;
@@ -39,7 +43,6 @@ function App() {
         <CssBaseline/>
         <Header headerHeight={headerHeight}/>
         <Main/>
-        <Footer/>
       </ThemeProvider>
     </SharedStateProvider>
   );

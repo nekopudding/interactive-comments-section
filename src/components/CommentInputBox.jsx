@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import theme from 'theme'
 import { useSharedState } from 'utils/store'
 import InputField from './InputField'
+import selectAvatar from 'utils/resolveAvatarPath'
 
 function CommentInputBox(props) {
   const [state,setState] = useSharedState()
@@ -12,6 +13,7 @@ function CommentInputBox(props) {
   const inputField = useRef(null);
 
   function handleSubmit(){
+    if (text.trim().length === 0) return;
     if (type === 'comment') {
       const newComment = {
         id : newId,
@@ -57,7 +59,7 @@ function CommentInputBox(props) {
           p: 3,
         }}
       >
-        <Avatar alt="avatar" src={process.env.PUBLIC_URL + users.find(user => user.username === currentUser).image.png} sx={{mr: 2}}/>
+        <Avatar alt="avatar" src={selectAvatar(currentUser)} sx={{mr:2}}/>
         <InputField handleChange={handleTextChange} type={type} r={inputField}/>
         <Button 
           variant='contained' 
