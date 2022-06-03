@@ -1,14 +1,22 @@
-import React from 'react'
+import React, { useEffect,useState } from 'react'
 import {Box,Avatar,Typography} from '@mui/material';
 import {ReactComponent as ReplyIcon} from "images/icon-reply.svg"
 import { useSharedState } from 'utils/store';
 import theme from 'theme';
 import CommentAction from './CommentAction';
+import RelativeTime from '@yaireo/relative-time'
+
 
 function CommentHeader(props) {
-  const [state,useState] = useSharedState();
+  const [state,setState] = useSharedState();
   const {users,currentUser} = state;
   const {user,createdAt ,onDelete,onEdit,onReply, reply,edit, deleted} = props;
+  const [date,setDate] = useState('');
+
+  const relativeTime = new RelativeTime();
+  useEffect(()=> {
+    setDate(relativeTime.from(new Date(createdAt)))
+  },[])
 
   return (
     <>
@@ -21,7 +29,7 @@ function CommentHeader(props) {
           />
           <Typography variant="username" sx={{ml:2}}>{user}</Typography>
           {(user === currentUser) && <Typography variant="you" sx={{ml:1, height: 18, bgcolor: theme.palette.primary.main, py:'2px',px:'6px', lineHeight:1, borderRadius: '3px'}}>you</Typography>}
-          <Typography variant="body" sx={{ml:2}}>{createdAt}</Typography>
+          <Typography variant="body" sx={{ml:2}}>{date}</Typography>
         </Box>
         
         {!deleted &&

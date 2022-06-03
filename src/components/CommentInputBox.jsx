@@ -16,7 +16,7 @@ function CommentInputBox(props) {
       const newComment = {
         id : newId,
         content: text,
-        createdAt: new Date().toLocaleDateString("en-US"),
+        createdAt: new Date().toString(),
         score: 0,
         user: currentUser,
         replies: []
@@ -29,7 +29,7 @@ function CommentInputBox(props) {
       const newReply = {
         id : newId,
         content: text,
-        createdAt: new Date().toLocaleDateString("en-US"),
+        createdAt: new Date().toString(),
         score: 0,
         user: currentUser,
         replyingTo: replyingTo
