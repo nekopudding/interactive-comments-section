@@ -8,7 +8,7 @@ import selectAvatar from 'utils/resolveAvatarPath'
 function CommentInputBox(props) {
   const [state,setState] = useSharedState()
   const {users,currentUser, newId,comments} = state;
-  const {type, replyingTo,insertAt,setSelected} = props;
+  const {type, replyingTo,insertAt,setSelected,windowW} = props;
   const [text,setText] = useState("");
   const inputField = useRef(null);
 
@@ -51,7 +51,7 @@ function CommentInputBox(props) {
       <Box 
         id={type==='reply' ? 'replyBox' : ''} 
         sx={{
-          display: 'flex', 
+          display: {laptop: 'flex', mobile: 'block'},
           width: '100%', 
           minHeight: '150px',
           bgcolor: theme.palette.clr100,
@@ -59,20 +59,50 @@ function CommentInputBox(props) {
           p: 3,
         }}
       >
-        <Avatar alt="avatar" src={selectAvatar(currentUser)} sx={{mr:2}}/>
-        <InputField handleChange={handleTextChange} type={type} r={inputField}/>
-        <Button 
-          variant='contained' 
-          size='large' 
-          onClick={handleSubmit}
-          sx={{
-            width: 104, height: 48, ml:  2, borderRadius: '8px',
-            '&:hover': {bgcolor: theme.palette.primary.main, boxShadow: '0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)'}, 
-            '&:active': {bgcolor: theme.palette.primary.light}
-          }}
-        >
-          {type==='reply' ? 'Reply' : 'Send'}
-        </Button>
+        {(windowW <= theme.breakpoints.values.laptop) && 
+        <>
+          <Box sx={{display: 'flex', width: '100%', }}>
+            <InputField handleChange={handleTextChange} type={type} r={inputField}/>
+          </Box>
+          <Box sx={{display: 'flex', width: '100%', mt: 2, justifyContent: 'space-between', alignItems: 'center'}}>
+            <Avatar alt="avatar" src={selectAvatar(currentUser)} sx={{mr:2, width: 32, height: 32}}/>
+            <Button 
+              variant='contained' 
+              size='large' 
+              onClick={handleSubmit}
+              sx={{
+                width: 104, height: 48, ml:  2, borderRadius: '8px',
+                '&:hover': {bgcolor: theme.palette.primary.main, boxShadow: '0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)'}, 
+                '&:active': {bgcolor: theme.palette.primary.light}
+              }}
+            >
+              {type==='reply' ? 'Reply' : 'Send'}
+            </Button>
+          </Box>
+        </>
+        }
+        {
+          
+        }
+        {(windowW > theme.breakpoints.values.laptop) && 
+        <>
+          <Avatar alt="avatar" src={selectAvatar(currentUser)} sx={{mr:2}}/>
+          <InputField handleChange={handleTextChange} type={type} r={inputField}/>
+          <Button 
+            variant='contained' 
+            size='large' 
+            onClick={handleSubmit}
+            sx={{
+              width: 104, height: 48, ml:  2, borderRadius: '8px',
+              '&:hover': {bgcolor: theme.palette.primary.main, boxShadow: '0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%)'}, 
+              '&:active': {bgcolor: theme.palette.primary.light}
+            }}
+          >
+            {type==='reply' ? 'Reply' : 'Send'}
+          </Button>
+        </>
+        }
+        
       </Box>
     </>
   )

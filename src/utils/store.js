@@ -6,7 +6,7 @@ const initialState = {
   users: data.users,
   currentUser: data.currentUser,
   comments: data.comments,
-  newId: 5
+  newId: 5,
 };
 
 const useMyState = () => useState(initialState);

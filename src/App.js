@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 
 import { SharedStateProvider } from './utils/store';
@@ -11,6 +11,7 @@ import {useSharedState} from 'utils/store';
 
 function App() {
   const [state, setState] = useSharedState();
+  const [windowW,setWindowW] = useState(window.innerWidth);
   const headerHeight = 56;
 
   // useEffect(()=> {
@@ -29,20 +30,24 @@ function App() {
   //   }));
   // },[setState]) //load the last currentUser, comments, 
 
+  useEffect(()=>{
+    window.addEventListener('resize', ()=>{
+      setWindowW(window.innerWidth)
+    })
+  },[])
 
-
-  useEffect(()=> { 
-    if (!state || !state.comment || !state.currentUser) return;
-    localStorage.setItem("comments", JSON.stringify(state.comments));
-    localStorage.setItem("currentUser", JSON.stringify(state.currentUser));
-  },[state])  
+  // useEffect(()=> { 
+  //   if (!state || !state.comment || !state.currentUser) return;
+  //   localStorage.setItem("comments", JSON.stringify(state.comments));
+  //   localStorage.setItem("currentUser", JSON.stringify(state.currentUser));
+  // },[state])  
 
   return (
     <SharedStateProvider>
       <ThemeProvider theme={theme}>
         <CssBaseline/>
         <Header headerHeight={headerHeight}/>
-        <Main/>
+        <Main windowW={windowW}/>
       </ThemeProvider>
     </SharedStateProvider>
   );

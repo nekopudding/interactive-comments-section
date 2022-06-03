@@ -5,18 +5,19 @@ import {ReactComponent as PlusIcon} from 'images/icon-plus.svg'
 import {ReactComponent as MinusIcon} from 'images/icon-minus.svg'
 
 function ScoreButton(props) {
-  const {score,onPlus,onMinus, upvoted,downvoted} = props;
+  const {score,onPlus,onMinus, upvoted,downvoted,direction} = props;
   return (
     <>
       <Stack 
         sx={{
-          height: '100px', 
-          width: '40px',
+          height: (direction === 'row') ? '40px' : '100px', 
+          width: (direction === 'row') ? '100px': '40px',
           bgcolor: theme.palette.clr200,
           borderRadius: '4px',
           alignItems: 'center',
           justifyContent: 'space-between',
         }}
+        direction={direction}
       >
         <IconButton 
           sx={{

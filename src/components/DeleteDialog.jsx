@@ -3,7 +3,7 @@ import {Typography, Modal, Stack,Button,Box} from '@mui/material'
 import theme from 'theme';
 
 function DeleteDialog(props) {
-  const {dialogOpen,setDialogOpen,handleConfirmDelete} = props;
+  const {dialogOpen,setDialogOpen,handleConfirmDelete, windowW} = props;
   return (
     <>
         <Modal
@@ -17,7 +17,7 @@ function DeleteDialog(props) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 400,
+            width: {laptop: 400, mobile: windowW - 32},
             borderRadius: '8px',
             bgcolor: theme.palette.clr100,
             p: 4,
@@ -36,7 +36,7 @@ function DeleteDialog(props) {
                 variant='contained' 
                 size='large'
                 disableElevation
-                sx={{'&, &:hover':{flexGrow: 1,bgcolor: theme.palette.clr400},borderRadius: '8px' }}
+                sx={{'&, &:hover':{flexGrow: 1,bgcolor: theme.palette.clr400},borderRadius: '8px',px: 0 }}
               >
                 NO, CANCEL
               </Button>
@@ -46,7 +46,7 @@ function DeleteDialog(props) {
                 variant='contained' 
                 size='large'
                 disableElevation
-                sx={{'&, &:hover':{flexGrow: 1,bgcolor: theme.palette.secondary.main}, ml: 1.5,borderRadius: '8px' }}
+                sx={{'&, &:hover':{flexGrow: 1,bgcolor: theme.palette.secondary.main}, ml: 1.5,borderRadius: '8px',px: 0 }}
               >
                 YES, DELETE
               </Button>

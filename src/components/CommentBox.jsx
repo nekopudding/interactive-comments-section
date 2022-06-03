@@ -3,6 +3,7 @@ import React, {useEffect, useState} from 'react'
 import theme from 'theme';
 import { useSharedState } from 'utils/store';
 import CommentHeader from './CommentHeader';
+import CommentHeaderActions from './CommentHeaderActions';
 import CommentInputBox from './CommentInputBox';
 import DeleteDialog from './DeleteDialog';
 import EditField from './EditField';
@@ -14,7 +15,7 @@ function CommentBox(props) {
   const [state,setState] = useSharedState();
   const {users,currentUser, comments} = state;
 
-  const {id, content, createdAt, score,user,replies, replyingTo, selected,setSelected} = props;
+  const {id, content, createdAt, score,user,replies, replyingTo, selected,setSelected,windowW} = props;
   const [editText,setEditText] = useState(content);
   const [totalVotes,setTotalVotes] = useState(score);
   const [dialogOpen,setDialogOpen] = useState(false);
@@ -166,9 +167,9 @@ function CommentBox(props) {
           p: 3,
         }}
       >
-        {content !== "\0" && <ScoreButton score={totalVotes} onPlus={handleUpvote} onMinus={handleDownvote} upvoted={currUserVote === 1} downvoted={currUserVote === -1}/>}
-        <Box sx={{flexGrow: 1, ml: 3, }}>
-          <CommentHeader user={user} createdAt={createdAt} onDelete={handleDelete} onEdit={handleEdit} onReply={handleReply} reply={selected === id} edit={selected === -id} deleted={content === "\0"}/>
+        {content !== "\0" && (windowW > theme.breakpoints.values.laptop) && <ScoreButton score={totalVotes} onPlus={handleUpvote} onMinus={handleDownvote} upvoted={currUserVote === 1} downvoted={currUserVote === -1}/>}
+        <Box sx={{flexGrow: 1, ml: {laptop: 3, mobile: 0} }}>
+          <CommentHeader user={user} createdAt={createdAt} onDelete={handleDelete} onEdit={handleEdit} onReply={handleReply} reply={selected === id} edit={selected === -id} deleted={content === "\0"} windowW={windowW}/>
           {content !== "\0" ? 
             (selected === -id) ? 
               <EditField defaultValue={content} onChange={handleEditTextChange} onSubmit={handleEditSubmit}/>
@@ -183,23 +184,37 @@ function CommentBox(props) {
             :
             <Typography variant='deleted'>This comment has been deleted.</Typography>
           }
-          
+          {(windowW <= theme.breakpoints.values.laptop) && (content !== "\0") &&
+            <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', mt: 2}}>
+              <ScoreButton score={totalVotes} onPlus={handleUpvote} onMinus={handleDownvote} upvoted={currUserVote === 1} downvoted={currUserVote === -1} direction='row'/>
+              <CommentHeaderActions user={user} onDelete={handleDelete} onEdit={handleEdit} onReply={handleReply} reply={selected === id} edit={selected === -id}/>
+            </Box>
+          }
         </Box>
       </Box>
-      {(selected === id) && <CommentInputBox type='reply' replyingTo={user} insertAt={findIndex(id).c} setSelected={setSelected}/>}
+      {(selected === id) && <CommentInputBox type='reply' replyingTo={user} insertAt={findIndex(id).c} setSelected={setSelected} windowW={windowW}/>}
       {replies && replies.length > 0 && 
-        <Box sx={{display: 'flex'}}>
-          <Divider orientation='vertical' sx={{mx: '44px', borderRightWidth: '2px', borderColor: theme.palette.clr300}} flexItem/>
-          <Box sx={{'& > * + *': {mt: 2}}}>
+        <Box sx={{display: 'flex', width: '100%'}}>
+          <Divider 
+            orientation='vertical' 
+            sx={{
+              ml: {laptop: 5.5, mobile: 0}, 
+              mr:{laptop: 5.5, mobile: 2}, 
+              borderRightWidth: '2px', 
+              borderColor: theme.palette.clr300
+            }} 
+            flexItem  
+          />
+          <Box sx={{'& > * + *': {mt: 2}, width: '100%'}}>
             {replies.map(reply => {
               return (
-                <CommentBox key={reply.id} {...reply} selected={selected} setSelected={setSelected}/>
+                <CommentBox key={reply.id} {...reply} selected={selected} setSelected={setSelected} windowW={windowW}/>
               )
             }) }
           </Box>
         </Box>
       }
-      <DeleteDialog dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} handleConfirmDelete={handleConfirmDelete}/>
+      <DeleteDialog dialogOpen={dialogOpen} setDialogOpen={setDialogOpen} handleConfirmDelete={handleConfirmDelete} windowW={windowW}/>
     </>
   )
 }

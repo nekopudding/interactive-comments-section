@@ -4,9 +4,11 @@ import {useSharedState} from 'utils/store';
 import CommentBox from './CommentBox';
 import CommentInputBox from './CommentInputBox';
 
-function Main() {
+function Main(props) {
   const [state,setState] = useSharedState();
   const {comments} = state;
+  const {windowW} = props
+
   const [selected,setSelected] = useState(0); //0 for none, -id for edit, id for reply
   const [reorderedComments,setReorderedComments] = useState(comments);
 
@@ -56,7 +58,8 @@ function Main() {
       <Stack 
         sx={{
           my: 6,
-          width: "730px",
+          width: {laptop: "730px", mobile: "100%"},
+          p: {laptop: 0, mobile: 2},
           mx: 'auto',
           alignItems: 'center',
           // border: '1px solid red',
@@ -70,10 +73,11 @@ function Main() {
             key={c.id} 
             selected={selected}
             setSelected={setSelected}
+            windowW={windowW}
             {...c}
           />
         )}
-        <CommentInputBox type='comment'/>
+        <CommentInputBox type='comment' windowW={windowW}/>
       </Stack>
 
     </>

@@ -6,12 +6,13 @@ import theme from 'theme';
 import CommentAction from './CommentAction';
 import RelativeTime from '@yaireo/relative-time'
 import selectAvatar from 'utils/resolveAvatarPath';
+import CommentHeaderActions from './CommentHeaderActions';
 
 
 function CommentHeader(props) {
   const [state,setState] = useSharedState();
   const {users,currentUser} = state;
-  const {user,createdAt ,onDelete,onEdit,onReply, reply,edit, deleted} = props;
+  const {user,createdAt ,onDelete,onEdit,onReply, reply,edit, deleted,windowW} = props;
   const [date,setDate] = useState('');
 
   const relativeTime = new RelativeTime();
@@ -37,17 +38,8 @@ function CommentHeader(props) {
           <Typography variant="body" sx={{ml:2}}>{date}</Typography>
         </Box>
         
-        {!deleted &&
-          <Box className="header-right" sx={{ml: 3, display: 'flex', alignItems: 'center'}}>
-            {(user === currentUser) ? 
-              <>
-                <CommentAction type='delete' onClick={onDelete}/> 
-                <CommentAction type='edit' sx={{ml: 3}} onClick={onEdit} edit={edit}/>
-              </> 
-              :
-              <CommentAction type='reply' onClick={onReply} reply={reply}/>
-            }
-          </Box>
+        {!deleted && (windowW > theme.breakpoints.values.laptop) &&
+          <CommentHeaderActions user={user} onDelete={onDelete} onEdit={onEdit} onReply={onReply} reply={reply} edit={edit}/>
         }
         
 
