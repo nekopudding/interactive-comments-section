@@ -17,7 +17,7 @@ function DeleteDialog(props) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: {laptop: 400, mobile: windowW - 32},
+            width: {tablet: 400, mobile: windowW - 32},
             borderRadius: '8px',
             bgcolor: theme.palette.clr100,
             p: 4,
